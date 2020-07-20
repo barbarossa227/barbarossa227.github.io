@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <script src="js/jquery-3.5.1.js"></script>
+
+    <style>
+        body{
+            background-color: gray;
+        }
+
+
+        form>fieldset{
+            background-color: lightskyblue;
+        }
+    </style>
+
+</head>
+<body>
+
+    <h1>회원가입</h1>
+
+    
+    <form action="javascript:alert('제출성공'); this.memberjoin.reset();" name="memberjoin" method="POST">
+        
+        <fieldset>
+            <legend>필수사항</legend>
+            아이디:<input type="text" id="id" required><br> <br>
+            비밀번호: <input type="password" name="passwd" id="passwd" required><br> <br>
+            비밀번호확인: <input type="password" name="passwdCk" id="passwdCk" required><br> <br>
+            이메일: <input type="email" name="email" id="email" required><br> <br>
+        </fieldset>
+    
+        <fieldset>
+            <legend>선택사항</legend>
+            이름: <input type="text" id="username"> <br><br>
+            주소: <input type="text" id="addr"> <br><br>
+            생년월일: <input type="date" name="birth" id="birth"> <br><br>
+        </fieldset>
+    
+        <input type="submit" value="회원가입">
+
+    </form>
+    
+    <script>
+        
+        var memberjoin = document.querySelector('[name=memberjoin]');
+
+        var memList = JSON.parse(localStorage.getItem('memList'));
+    
+        if(memList == null) memList=[];
+
+        // console.log(memberjoin);
+
+
+
+        memberjoin.onsubmit = function(){
+
+            var pwd = passwd.value.trim();
+
+            var chk = 0;
+
+            $.each(memList, function(index,val){
+                if($('#id').val() == val.ID){
+                    // alert('중복된 아이디 입니다. 다시입력하세요');
+                    chk++;
+                };
+            });
+            
+            if($('#id').val().length <4){
+                alert('아이디는 4글자 이상입력해주세요');
+                return false;
+            }
+
+            if(chk > 0){
+                alert('아이디가 중복입니다 다시입력하세요');
+                return false
+            };
+
+            
+
+            if((/^.{8,12}$/.test(pwd) && /\d/.test(pwd) && /[*!&]/.test(pwd)) == false){
+                alert("비밀번호 유효하지않습니다 제대로 입력하세요\n비번은 8~12글자 *!&중 한글자입력해야합니다.");
+                return false;
+            }
+
+            // return false;
+    
+            if($('#passwd').val() != $('#passwdCk').val()){
+                alert('비밀번호가 일치하지않습니다 확인바랍니다.');
+                $('#passwd').val() = '';
+                $('#passwdCk').val() = '';
+                return false;
+            };
+
+            join();
+
+            return true;
+
+        };
+
+        function join(){
+
+            var memList = JSON.parse(localStorage.getItem('memList'));
+        
+            if(memList == null) memList=[];
+            
+            var $member = {
+                ID: $('#id').val(),
+                passwd: $('#passwd').val(),
+                email: $('#email').val(),
+                username: $('#username').val(),
+                addr: $('#addr').val(),
+                birth: $('#birth').val()
+            };
+    
+            
+    
+    
+            memList.push($member);
+            memstr = JSON.stringify(memList);
+            localStorage.setItem('memList',memstr);
+
+        };
+
+
+        // function join(){
+        // }
+
+    </script>
+    
+    
+
+</body>
+</html>

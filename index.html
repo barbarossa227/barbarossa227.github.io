@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <script src="js/jquery-3.5.1.js"></script>
+
+    <style>
+
+        body{
+            background-color: royalblue;
+        }
+
+        .welcome{
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1>index</h1>
+
+    <hr>
+
+    <form action="javascript:alert('로그인성공'); this.login.reset();" name="login" method="POST">
+
+        아이디:<input type="text" id="id">
+        비밀번호: <input type="password" name="passwd" id="passwd">
+        <input type="submit" value="로그인">
+
+
+    </form>
+
+    <div class="welcome" id="welcome">
+        
+    </div>
+
+    <hr>
+
+    <ul>
+        <li><a href="./introduce.html">소개</a></li>
+        <li><a href="./warhammer.html">warhammer</a></li>
+        <li><a href="./roadmap.html">roadmap</a></li>
+        <li><a href="#" onclick="pop();">회원가입</a></li>
+    </ul>
+    
+    <script>
+        
+        // if(memList == null) memList=[];
+        
+        var login = document.querySelector('[name=login]');
+        var wel = $('#welcome');
+        var menu = $('[name=login]');
+        
+        login.onsubmit = function(){
+            var memList = JSON.parse(localStorage.getItem('memList'));
+            var $id = $('#id').val();
+            var $passwd = $('#passwd').val();
+
+
+            var cnt = 0;
+            $.each(memList, function(index,value){
+                if(($id == value.ID && $passwd == value.passwd) == true){
+                    cnt++
+                    // return false;
+                }
+            });
+
+            if(cnt<=0){
+                alert('로그인실패 아이디 비밀번호를 확인하세요');
+                return false;
+            };
+
+            menu.css('display','none');
+            var come = $id+'님 환영합니다.';
+            wel.css('display','block').html(come+'\t'+ ('<input type="button" value="로그아웃" onclick="logout()">'));
+
+            return true;
+        };
+
+        function logout(){
+            wel.css('display','none');
+            menu.css('display','block');
+        }
+
+        function pop(){
+            open('join.html','join','width=500','height=250','top=300','left=200');
+        }
+    </script>
+</body>
+</html>
